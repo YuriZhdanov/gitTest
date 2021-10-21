@@ -1,30 +1,15 @@
-import requests
+import git
+import datetime
 import os
-import subprocess
-from pprint import pprint
+from time import *
+from os import path
+from git import Repo
 
-token = os.getenv('GITHUB_TOKEN', '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')
 
-owner = "kaltura"
-# repo = input('What is your repo? ')
-# branche = input('What is your branche? ')
-# filename = input('What is your filename? ')
+curr_dir = os.path.dirname(os.path.realpath(__file__))
+repo = Repo(curr_dir)
 
-repo = 'platform-install-packages'
-branche = '9.13'
-filename = input('What is your filename? ')
-
-params = {
-    "state": "open",
-}
-headers = {'Authorization': f'token {token}'}
-
-query_url = f"https://api.github.com/repos/{owner}/{repo}/contents/{filename}"
-r = requests.get(query_url, headers=headers, params=params)
-
-fileinfo = r.json()
-if fileinfo['download_url']:
-    f = requests.get(fileinfo['download_url'], headers=headers, params=params)
-    filecontents = f.text
-    print('\n---------------------------------- file contents ----------------------------------')
-    pprint(filecontents)
+origin = repo.remote()
+print(origin)
+repo.create_head('my_new_branch')
+# origin.push('my_new_branch')
